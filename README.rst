@@ -8,18 +8,25 @@ messages to a local socket.
 installation
 ------------
 
-1. ``pip install -r requirements.txt``
-2. ``python caravan_pathfinder.py -h``
+this application is intended to be built as an openshift
+source-to-image image. for more information on source-to-image, please
+see https://github.com/openshift/source-to-image
 
-usage
------
-
-to begin the pathfinder, run the following:
+to build and run this application with s2i and docker, use the
+following commands (or something similar to your settings):
 
 ::
 
-    $ python caravan_pathfinder.py --port 1984 --url amqp://127.0.0.1/ \
-      --queue my_topic
+    $ s2i build https://github.com/sparkhara/caravan-pathfinder \
+      openshift/python-27-centos7 caravan-pathfinder-centos7
+
+    (... lots of build exhaust ...)
+
+    $ docker run --rm -i -t -p 1984:1984 \
+      -e PATHFINDER_BROKER_URL=amqp://127.0.0.1/ \
+      caravan-pathfinder-centos7
+
+    (log output from caravan-pathfinder)
 
 when started it will wait until a connection is made to the local
 socket before processing will begin.
