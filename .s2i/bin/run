@@ -6,5 +6,5 @@
 PATHFINDER_PORT=${PATHFINDER_PORT:-1984}
 PATHFINDER_BROKER_QUEUE=${PATHFINDER_BROKER_QUEUE:-"sparkhara"}
 
-`which python` ${HOME}/caravan_pathfinder.py --port $PATHFINDER_PORT \
-        --url $PATHFINDER_BROKER_URL --queue $PATHFINDER_BROKER_QUEUE
+`which python` ${HOME}/caravan_pathfinder.py --port ${PATHFINDER_PORT} \
+        --url ${PATHFINDER_BROKER_URL} --queue ${PATHFINDER_BROKER_QUEUE}

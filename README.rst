@@ -5,8 +5,8 @@ this application assists in pushing data to the whirlwind caravan. it
 will read messages from an amqp message broker queue and send those
 messages to a local socket.
 
-installation
-------------
+installation and execution
+--------------------------
 
 this application is intended to be built as an openshift
 source-to-image image. for more information on source-to-image, please
