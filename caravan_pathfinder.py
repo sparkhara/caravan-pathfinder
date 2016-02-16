@@ -16,25 +16,13 @@ def accept(port):
     return sock.accept()
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description='read messages from an amqp broker and send them to a port')
-    parser.add_argument('--port', help='the port to send on (default: 1984)',
-                        type=int,
-                        default=1984)
-    parser.add_argument('--url', help='the amqp broker url',
-                        required=True)
-    parser.add_argument('--queue', help='the amqp queue name to subscribe '
-                        '(default: sparkhara)',
-                        default='sparkhara')
-    args = parser.parse_args()
-
+def main(url, port, queue_name):
     while True:
-        send, send_addr = accept(args.port)
+        send, send_addr = accept(port)
         print('connection from: {}'.format(send_addr))
         try:
-            conn = kombu.Connection(args.url)
-            queue = conn.SimpleQueue(args.queue)
+            conn = kombu.Connection(url)
+            queue = conn.SimpleQueue(queue_name)
             while True:
                 try:
                     message = queue.get(block=False, timeout=1)
@@ -53,5 +41,17 @@ def main():
             send.close()
             pass
 
+
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(
+        description='read messages from an amqp broker and send them to a port')
+    parser.add_argument('--port', help='the port to send on (default: 1984)',
+                        type=int,
+                        default=1984)
+    parser.add_argument('--url', help='the amqp broker url',
+                        required=True)
+    parser.add_argument('--queue', help='the amqp queue name to subscribe '
+                        '(default: sparkhara)',
+                        default='sparkhara')
+    args = parser.parse_args()
+    main(args.url, args.port, args.queue)
