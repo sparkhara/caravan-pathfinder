@@ -25,7 +25,9 @@ def main(url, port, queue_name):
         send, send_addr = accept(port)
         logging.info('connection from: {}'.format(send_addr))
         try:
+            logging.debug('gaining amqp connection')
             conn = kombu.Connection(url)
+            logging.debug('configuring queue')
             queue = conn.SimpleQueue(queue_name)
             while True:
                 try:
@@ -40,8 +42,10 @@ def main(url, port, queue_name):
                 logging.debug('sent {} bytes'.format(s))
                 message.ack()
         except socket.error:
+            logging.debug('recieved socket error')
             pass
         finally:
+            logging.debug('closing connection')
             send.close()
             pass
 
