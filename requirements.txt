@@ -1,1 +1,1 @@
-kombu
+kombu==3.0.30
