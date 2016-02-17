@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import logging
 import socket
 import time
 
@@ -17,9 +18,12 @@ def accept(port):
 
 
 def main(url, port, queue_name):
+    logging.debug('main called with url={}, port={}, queue={}'.format(
+                  url, port, queue_name))
     while True:
+        logging.info('waiting for connection on port {}'.format(port))
         send, send_addr = accept(port)
-        print('connection from: {}'.format(send_addr))
+        logging.info('connection from: {}'.format(send_addr))
         try:
             conn = kombu.Connection(url)
             queue = conn.SimpleQueue(queue_name)
@@ -29,11 +33,11 @@ def main(url, port, queue_name):
                 except kombu.simple.SimpleQueue.Empty:
                     time.sleep(1)
                     continue
-                print('Received message:')
-                print(message.payload)
+                logging.debug('Received message:')
+                logging.debug(message.payload)
                 s = send.send(json.dumps(message.payload))
                 s += send.send('\n')
-                print('sent {} bytes'.format(s))
+                logging.debug('sent {} bytes'.format(s))
                 message.ack()
         except socket.error:
             pass
