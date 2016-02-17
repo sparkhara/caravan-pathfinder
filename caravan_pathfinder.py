@@ -41,8 +41,8 @@ def main(url, port, queue_name):
                 s += send.send('\n')
                 logging.debug('sent {} bytes'.format(s))
                 message.ack()
-        except socket.error:
-            logging.debug('recieved socket error')
+        except socket.error as e:
+            logging.debug('recieved socket error, {}'.format(e))
             pass
         finally:
             logging.debug('closing connection')
