@@ -29,6 +29,7 @@ def main(url, port, queue_name):
             conn = kombu.Connection(url)
             logging.debug('configuring queue')
             queue = conn.SimpleQueue(queue_name)
+            logging.debug('about to enter message loop')
             while True:
                 try:
                     message = queue.get(block=False, timeout=1)
